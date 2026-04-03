@@ -39,6 +39,7 @@ func TestSuite(t *testing.T) {
 	suite.Run(t, new(OrderRepositoryTestSuite))
 }
 
+// Save
 func (suite *OrderRepositoryTestSuite) TestGivenAnOrder_WhenSave_ThenShouldSaveOrder() {
 	order, err := entity.NewOrder("123", 10.0, 2.0)
 	suite.NoError(err)
@@ -59,6 +60,7 @@ func (suite *OrderRepositoryTestSuite) TestGivenAnOrder_WhenSave_ThenShouldSaveO
 	suite.Equal(order.FinalPrice, orderResult.FinalPrice)
 }
 
+// FindAll
 func (suite *OrderRepositoryTestSuite) TestGivenOrders_WhenFindAll_ThenShouldReturnAllOrdersOrderedByID() {
 	order1, err := entity.NewOrder("b", 10.0, 2.0)
 	suite.NoError(err)
