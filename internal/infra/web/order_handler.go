@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/entity"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/usecase"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/pkg/events"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/entity"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/usecase"
+	"github.com/luishenriqs/Desafio-Clean-Arch/pkg/events"
 )
 
 type WebOrderHandler struct {

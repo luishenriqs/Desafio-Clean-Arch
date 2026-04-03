@@ -1,6 +1,6 @@
 package graph
 
-import "github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/usecase"
+import "github.com/luishenriqs/Desafio-Clean-Arch/internal/usecase"
 
 // This file will not be regenerated automatically.
 //

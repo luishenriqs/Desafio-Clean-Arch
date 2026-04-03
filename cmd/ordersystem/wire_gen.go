@@ -8,13 +8,13 @@ package main
 
 import (
 	"database/sql"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/entity"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/event"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/infra/database"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/infra/web"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/internal/usecase"
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/pkg/events"
 	"github.com/google/wire"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/entity"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/event"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/infra/database"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/infra/web"
+	"github.com/luishenriqs/Desafio-Clean-Arch/internal/usecase"
+	"github.com/luishenriqs/Desafio-Clean-Arch/pkg/events"
 )
 
 // Injectors from wire.go:

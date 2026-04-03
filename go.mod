@@ -1,4 +1,4 @@
-module github.com/luishenriqs/GoProject/Desafio-Clean-Arch
+module github.com/luishenriqs/Desafio-Clean-Arch
 
 go 1.19
 

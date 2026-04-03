@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/luishenriqs/GoProject/Desafio-Clean-Arch/pkg/events"
+	"github.com/luishenriqs/Desafio-Clean-Arch/pkg/events"
 	"github.com/streadway/amqp"
 )
 
