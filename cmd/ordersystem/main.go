@@ -19,7 +19,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	// mysql
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -29,13 +28,28 @@ func main() {
 		panic(err)
 	}
 
-	db, err := sql.Open(configs.DBDriver, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", configs.DBUser, configs.DBPassword, configs.DBHost, configs.DBPort, configs.DBName))
+	db, err := sql.Open(
+		configs.DBDriver,
+		fmt.Sprintf(
+			"%s:%s@tcp(%s:%s)/%s",
+			configs.DBUser,
+			configs.DBPassword,
+			configs.DBHost,
+			configs.DBPort,
+			configs.DBName,
+		),
+	)
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
-	rabbitMQChannel := getRabbitMQChannel()
+	rabbitMQChannel := getRabbitMQChannel(
+		configs.RabbitMQUser,
+		configs.RabbitMQPassword,
+		configs.RabbitMQHost,
+		configs.RabbitMQPort,
+	)
 
 	eventDispatcher := events.NewEventDispatcher()
 	eventDispatcher.Register("OrderCreated", &handler.OrderCreatedHandler{
@@ -49,6 +63,7 @@ func main() {
 	webOrderHandler := NewWebOrderHandler(db, eventDispatcher)
 	webserver.AddHandler("POST", "/order", webOrderHandler.Create)
 	webserver.AddHandler("GET", "/order", webOrderHandler.List)
+
 	fmt.Println("Starting web server on port", configs.WebServerPort)
 	go webserver.Start()
 
@@ -64,10 +79,17 @@ func main() {
 	}
 	go grpcServer.Serve(lis)
 
-	srv := graphql_handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
-		CreateOrderUseCase: *createOrderUseCase,
-		ListOrdersUseCase:  *listOrdersUseCase,
-	}}))
+	srv := graphql_handler.NewDefaultServer(
+		graph.NewExecutableSchema(
+			graph.Config{
+				Resolvers: &graph.Resolver{
+					CreateOrderUseCase: *createOrderUseCase,
+					ListOrdersUseCase:  *listOrdersUseCase,
+				},
+			},
+		),
+	)
+
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
 
@@ -75,14 +97,16 @@ func main() {
 	http.ListenAndServe(":"+configs.GraphQLServerPort, nil)
 }
 
-func getRabbitMQChannel() *amqp.Channel {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+func getRabbitMQChannel(user, password, host, port string) *amqp.Channel {
+	conn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%s/", user, password, host, port))
 	if err != nil {
 		panic(err)
 	}
+
 	ch, err := conn.Channel()
 	if err != nil {
 		panic(err)
 	}
+
 	return ch
 }
