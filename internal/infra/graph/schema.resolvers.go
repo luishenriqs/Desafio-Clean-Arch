@@ -18,10 +18,12 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input *model.OrderIn
 		Price: float64(input.Price),
 		Tax:   float64(input.Tax),
 	}
+
 	output, err := r.CreateOrderUseCase.Execute(dto)
 	if err != nil {
 		return nil, err
 	}
+
 	return &model.Order{
 		ID:         output.ID,
 		Price:      float64(output.Price),
@@ -30,7 +32,32 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input *model.OrderIn
 	}, nil
 }
 
+// ListOrders is the resolver for the listOrders field.
+func (r *queryResolver) ListOrders(ctx context.Context) ([]*model.Order, error) {
+	output, err := r.ListOrdersUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	orders := make([]*model.Order, 0, len(output))
+
+	for _, order := range output {
+		orders = append(orders, &model.Order{
+			ID:         order.ID,
+			Price:      order.Price,
+			Tax:        order.Tax,
+			FinalPrice: order.FinalPrice,
+		})
+	}
+
+	return orders, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
